@@ -10,8 +10,7 @@ export const Honeybadger = {
   },
 };
 
-// deno-lint-ignore no-explicit-any
-async function post(body: Record<string, any>) {
+async function post(body: Payload) {
   if (API_KEY != undefined) {
     let response = await fetch("https://api.honeybadger.io/v1/notices", {
       method: "POST",
@@ -34,8 +33,31 @@ async function post(body: Record<string, any>) {
   }
 }
 
-// deno-lint-ignore no-explicit-any
-function payload(error: Error): Record<string, any> {
+interface Payload {
+  notifier: {
+    name: string;
+    url: string;
+    version: string;
+  }
+  error: {
+    class: string;
+    message: string;
+    backtrace: BacktraceEntry[];
+  }
+  server: {
+    project_root: string | undefined;
+    environment_name: string;
+    pid: number;
+  }
+}
+
+interface BacktraceEntry {
+  number: string;
+  file: string;
+  method: string;
+}
+
+export function payload(error: Error): Payload {
   return {
     notifier: {
       name: "Honeybadgey Deno Notifier",
@@ -55,7 +77,7 @@ function payload(error: Error): Record<string, any> {
   };
 }
 
-function backtrace(error: Error): Record<string, string> {
+function backtrace(error: Error): BacktraceEntry[] {
   let trace = stackTrace.parse(error);
 
   // deno-lint-ignore no-explicit-any
