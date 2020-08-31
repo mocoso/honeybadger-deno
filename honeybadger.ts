@@ -47,15 +47,11 @@ function payload(error: Error): Record<string, any> {
       message: error.message,
       backtrace: backtrace(error),
     },
-    server: server(),
-  };
-}
-
-function server(): Record<string, string | number | undefined> {
-  return {
-    project_root: Deno.env.get("PWD"),
-    environment_name: Deno.env.get("ENVIRONMENT") || "development",
-    pid: Deno.pid,
+    server: {
+      project_root: Deno.env.get("PWD"),
+      environment_name: Deno.env.get("ENVIRONMENT") || "development",
+      pid: Deno.pid,
+    },
   };
 }
 
