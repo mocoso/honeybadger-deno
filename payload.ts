@@ -7,17 +7,17 @@ export interface Payload {
     name: string;
     url: string;
     version: string;
-  }
+  };
   error: {
     class: string;
     message: string;
     backtrace: BacktraceEntry[];
-  }
+  };
   server: {
     project_root: string | undefined;
     environment_name: string;
     pid: number;
-  }
+  };
 }
 
 interface BacktraceEntry {
