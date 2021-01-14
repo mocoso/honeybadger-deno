@@ -1,6 +1,14 @@
 # Honeybadger for Deno
 
-A minimal Honeybadger client for Deno projects
+A very minimal Honeybadger client for Deno projects
+
+This client is not officially supported by Honeybadger and I have no intention
+of turning it into a fully featured client.
+
+If you make use of it I would encourage you to let Honeybadger know that you
+are interested in Honeybadger providing a deno client. If you want more
+features then you should definitely let Honeybadger know.
+
 
 ## Usage
 
