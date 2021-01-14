@@ -1,4 +1,4 @@
-import { stackTrace } from "./deps.ts";
+import { ServerRequest, stackTrace } from "./deps.ts";
 
 import { VERSION } from "./version.ts";
 
@@ -13,11 +13,16 @@ export interface Payload {
     message: string;
     backtrace: BacktraceEntry[];
   };
+  request?: Request;
   server: {
     project_root: string | undefined;
     environment_name: string;
     pid: number;
   };
+}
+
+interface Request {
+  url: string;
 }
 
 interface BacktraceEntry {
@@ -26,8 +31,8 @@ interface BacktraceEntry {
   method: string;
 }
 
-export function payload(error: Error): Payload {
-  return {
+export function payload(error: Error, serverRequest?: ServerRequest): Payload {
+  const basePayload = {
     notifier: {
       name: "Honeybadgey Deno Notifier",
       url: "https://github.com/mocoso/honeybadger-deno",
@@ -44,6 +49,12 @@ export function payload(error: Error): Payload {
       pid: Deno.pid,
     },
   };
+
+  if (serverRequest == undefined) {
+    return basePayload;
+  } else {
+    return { ...basePayload, ...{ request: request(serverRequest) } };
+  }
 }
 
 function backtrace(error: Error): BacktraceEntry[] {
@@ -57,4 +68,10 @@ function backtrace(error: Error): BacktraceEntry[] {
       method: c.methodName || c.functionName || "",
     };
   }).filter((l: Record<string, string | null>) => l.file != null);
+}
+
+function request(serverRequest: ServerRequest) {
+  return {
+    url: serverRequest.url,
+  };
 }

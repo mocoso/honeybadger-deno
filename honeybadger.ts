@@ -1,11 +1,12 @@
 import { Payload, payload } from "./payload.ts";
+import { ServerRequest } from "./deps.ts";
 
 const USER_AGENT = "HB-Deno";
 const API_KEY = Deno.env.get("HONEYBADGER_API_KEY");
 
 export const Honeybadger = {
-  async notify(error: Error) {
-    await post(payload(error));
+  async notify(error: Error, serverRequest?: ServerRequest) {
+    await post(payload(error, serverRequest));
   },
 };
 
