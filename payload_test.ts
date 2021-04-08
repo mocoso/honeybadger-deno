@@ -19,3 +19,11 @@ Deno.test("payload - with context meta data", () => {
   assert(example.request.context != undefined);
   assertEquals(example.request.context, { foo: "bar" });
 });
+
+Deno.test("payload - with context fingerprint", () => {
+  const metaData = { fingerprint: "fingerprint-for-grouping-errors" };
+  const example = payload(new Error("foo"), metaData);
+
+  assert(example.error != undefined);
+  assertEquals(example.error.fingerprint, "fingerprint-for-grouping-errors");
+});

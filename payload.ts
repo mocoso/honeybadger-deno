@@ -12,6 +12,7 @@ export interface Payload {
     class: string;
     message: string;
     backtrace: BacktraceEntry[];
+    fingerprint?: string;
   };
   request?: MetaData;
   server: {
@@ -22,7 +23,8 @@ export interface Payload {
 }
 
 export interface MetaData {
-  context: Record<string, unknown>;
+  fingerprint?: string;
+  context?: Record<string, unknown>;
 }
 
 interface BacktraceEntry {
@@ -42,6 +44,7 @@ export function payload(error: Error, metaData?: MetaData): Payload {
       class: error.constructor.name,
       message: error.message,
       backtrace: backtrace(error),
+      fingerprint: metaData ? metaData.fingerprint : undefined,
     },
     server: {
       project_root: Deno.env.get("PWD"),
@@ -50,10 +53,10 @@ export function payload(error: Error, metaData?: MetaData): Payload {
     },
   };
 
-  if (metaData == undefined) {
+  if (metaData == undefined || metaData.context == undefined) {
     return basePayload;
   } else {
-    return { ...basePayload, ...{ request: metaData } };
+    return { ...basePayload, ...{ request: { context: metaData.context } } };
   }
 }
 
