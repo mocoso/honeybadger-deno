@@ -7,7 +7,7 @@ Deno.test("Honeybadger.notify", async () => {
     throw new Error("foo");
   } catch (error) {
     /* Assume success if it does not raise an error */
-    let promise = Honeybadger.notify(error);
+    const promise = Honeybadger.notify(error);
     await promise;
   }
 });

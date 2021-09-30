@@ -11,7 +11,7 @@ export const Honeybadger = {
 
 async function post(body: Payload) {
   if (API_KEY != undefined) {
-    let response = await fetch("https://api.honeybadger.io/v1/notices", {
+    const response = await fetch("https://api.honeybadger.io/v1/notices", {
       method: "POST",
       headers: {
         "Accept": "application/json",

@@ -61,7 +61,7 @@ export function payload(error: Error, metaData?: MetaData): Payload {
 }
 
 function backtrace(error: Error): BacktraceEntry[] {
-  let trace = stackTrace.parse(error);
+  const trace = stackTrace.parse(error);
 
   // deno-lint-ignore no-explicit-any
   return trace.map(function (c: any) {
