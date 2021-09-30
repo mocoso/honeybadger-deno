@@ -25,9 +25,13 @@ async function post(body: Payload) {
     if (response.status == 201) {
       JSON.parse(await response.text());
     } else {
-      throw `Honeybadger API client failed with status ${response.status}`;
+      console.error(
+        `Honeybadger API client failed with status ${response.status}`,
+      );
     }
   } else {
-    throw "Environment variable HONEYBADGER_API_KEY must be set for Honeybadger client";
+    console.error(
+      "Environment variable HONEYBADGER_API_KEY must be set for Honeybadger client",
+    );
   }
 }
